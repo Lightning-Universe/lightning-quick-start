@@ -11,9 +11,7 @@ from fastapi import FastAPI
 from fastapi.requests import Request
 from PIL import Image
 
-sys.path.insert(0, os.path.dirname(os.path.dirname(__file__)))
-
-from train.net import Net
+from quick_start.train.net import Net
 
 serve_script_path = __file__
 
