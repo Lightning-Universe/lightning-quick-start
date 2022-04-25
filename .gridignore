@@ -143,7 +143,7 @@ data
 .shared
 *.ckpt
 .shared
+.git
 .git/*
-./.git
 wandb
-__pycache__
+*__pycache__*
