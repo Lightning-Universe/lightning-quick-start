@@ -144,5 +144,6 @@ data
 *.ckpt
 .shared
 .git/*
+./.git
 wandb
 __pycache__
