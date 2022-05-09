@@ -5,7 +5,7 @@ exclude *.gridignore
 
 
 recursive-include images *.jpeg
-quick_start/train/demo_weights
+include quick_start/train/demo_weights
 
 
 # exclude tests from package
