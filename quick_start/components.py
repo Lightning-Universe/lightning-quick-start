@@ -17,7 +17,6 @@ class PyTorchLightningScript(TracerPythonScript):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, raise_exception=True, **kwargs)
         self.best_model_path = None
-        self.run_url = ""
 
     def configure_tracer(self):
         from pytorch_lightning import Trainer
@@ -32,7 +31,7 @@ class PyTorchLightningScript(TracerPythonScript):
                 self._work = work
 
             def on_train_start(self, trainer, *_):
-                self._work.run_url = trainer.logger.experiment._settings.run_url
+                self._work._url = trainer.logger.experiment._settings.run_url
 
         def trainer_pre_fn(self, *args, work=None, **kwargs):
             kwargs['callbacks'].append(CollectWandbURL(work))
@@ -68,7 +67,7 @@ class ImageServeGradio(ServeGradio):
         self._labels = {idx: str(idx) for idx in range(10)}
 
     def run(self, best_model_path):
-        self.examples = [os.path.join("./images", f) for f in os.listdir("./images")]
+        self.examples = []
         self.best_model_path = best_model_path
         self._transform = T.Compose([T.Resize((28, 28)), T.ToTensor()])
         super().run()

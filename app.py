@@ -21,10 +21,7 @@ class RootFlow(LightningFlow):
             cloud_compute=CloudCompute("gpu" if use_gpu else "cpu", 1),
         )
 
-        self.serve_demo = ImageServeGradio(
-            exposed_ports={"server": 1111},
-            cloud_compute=CloudCompute("cpu", 1),
-        )
+        self.serve_demo = ImageServeGradio(cloud_compute=CloudCompute("cpu", 1))
 
     def run(self):
         # 1. Run the ``train_script_path`` that trains a PyTorch model.
@@ -38,8 +35,8 @@ class RootFlow(LightningFlow):
 
     def configure_layout(self):
         return [
-            {"name": "WandB Run", "content": self.train.run_url},
-            {"name": "Gradio Demo", "content": self.serve_demo.exposed_url('server')},
+            {"name": "WandB Run", "content": self.train},
+            {"name": "Gradio Demo", "content": self.serve_demo},
         ]
 
 use_gpu= bool(int(os.getenv("USE_GPU", "0")))
