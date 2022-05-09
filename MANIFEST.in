@@ -2,6 +2,7 @@ include *.py
 include *.txt
 exclude *.lightning
 exclude *.gridignore
+recursive-exclude quick_start *.gridignore
 
 
 recursive-include images *.jpeg

@@ -1,9 +1,9 @@
 __version__ = "0.0.1"
 __author__ = "PyTorchLightning et al."
-__author_email__ = "mansy@grid.ai"
+__author_email__ = "name@grid.ai"
 __license__ = "TBD"
 __copyright__ = f"Copyright (c) 2021-2022, {__author__}."
-__homepage__ = "https://github.com/PyTorchLightning/lightning"
+__homepage__ = "https://github.com/PyTorchLightning/lightning-quick-start"
 __docs__ = "Lightning Quick Start"
 __long_doc__ = """
 What is it?
