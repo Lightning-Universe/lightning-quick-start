@@ -1,0 +1,7 @@
+include *.py
+include *.txt
+exclude *.lightning
+exclude *.gridignore
+
+# exclude tests from package
+recursive-exclude tests *
