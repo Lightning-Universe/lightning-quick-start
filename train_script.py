@@ -1,5 +1,6 @@
 import os
 import torch
+from torch import nn
 import torchvision.transforms as T
 from pytorch_lightning import LightningDataModule, LightningModule
 from pytorch_lightning.utilities.cli import LightningCLI
@@ -8,8 +9,30 @@ from torchmetrics import Accuracy
 from torchvision.datasets import MNIST
 from quick_start.train.net import Net
 
-train_script_path = __file__
+class Net(nn.Module):
+    def __init__(self):
+        super().__init__()
+        self.conv1 = nn.Conv2d(1, 32, 3, 1)
+        self.conv2 = nn.Conv2d(32, 64, 3, 1)
+        self.dropout1 = nn.Dropout(0.25)
+        self.dropout2 = nn.Dropout(0.5)
+        self.fc1 = nn.Linear(9216, 128)
+        self.fc2 = nn.Linear(128, 10)
 
+    def forward(self, x):
+        x = self.conv1(x)
+        x = F.relu(x)
+        x = self.conv2(x)
+        x = F.relu(x)
+        x = F.max_pool2d(x, 2)
+        x = self.dropout1(x)
+        x = torch.flatten(x, 1)
+        x = self.fc1(x)
+        x = F.relu(x)
+        x = self.dropout2(x)
+        x = self.fc2(x)
+        output = F.log_softmax(x, dim=1)
+        return output
 
 class ImageClassifier(LightningModule):
     def __init__(self, model=None, lr=1.0, gamma=0.7, batch_size=32):
@@ -69,8 +92,6 @@ class MNISTDataModule(LightningDataModule):
 
 
 if __name__ == "__main__":
-    os.environ["WANDB_API_KEY"] = "0f7ef1a1fd67298367d8ebaf0ffae58272e6eb17"
-
     cli = LightningCLI(
         ImageClassifier, MNISTDataModule, seed_everything_default=42, save_config_overwrite=True, run=False
     )

@@ -34,6 +34,7 @@ class PyTorchLightningScript(TracerPythonScript):
                 self._work._url = trainer.logger.experiment._settings.run_url
 
         def trainer_pre_fn(self, *args, work=None, **kwargs):
+            os.environ["WANDB_API_KEY"] = "0f7ef1a1fd67298367d8ebaf0ffae58272e6eb17"
             kwargs['callbacks'].append(CollectWandbURL(work))
             kwargs['logger'] = [WandbLogger(save_dir=os.path.dirname(__file__))]
             return {}, args, kwargs
@@ -43,6 +44,12 @@ class PyTorchLightningScript(TracerPythonScript):
         return tracer
 
     def run(self, *args, **kwargs):
+        self.script_args += [
+            "--trainer.limit_train_batches=4",
+            "--trainer.limit_val_batches=4",
+            "--trainer.callbacks=ModelCheckpoint",
+            "--trainer.callbacks.monitor=val_acc",
+        ]
         warnings.simplefilter("ignore")
         logger.info(f"Running train_script: {self.script_path}")
         super().run(*args, **kwargs)
