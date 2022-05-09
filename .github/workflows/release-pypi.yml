@@ -4,7 +4,7 @@ name: PyPI Release
 on:  # Trigger the workflow on push to master branch with changes in __about__.py
   push:
     branches:
-      - "master"
+      - "main"
     paths:
       - "quick_start/__about__.py"
 
