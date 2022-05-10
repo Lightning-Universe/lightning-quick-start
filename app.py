@@ -1,14 +1,15 @@
 import lightning as L
+from quick_start.components import PyTorchLightningScript, ImageServeGradio
 
 class TrainDeploy(L.LightningFlow):
     def __init__(self):
         super().__init__()
-        self.train_work = L.components.demo.PyTorchLightningScript(
+        self.train_work = PyTorchLightningScript(
             script_path="./train_script.py",
             script_args=["--trainer.max_epochs=5"],
         )
 
-        self.serve_work = L.components.demo.ImageServeGradio(L.CloudCompute("cpu", 1))
+        self.serve_work = ImageServeGradio(L.CloudCompute("cpu", 1))
 
     def run(self):
         # 1. Run the python script that trains the model
