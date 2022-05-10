@@ -4,7 +4,6 @@ import warnings
 from functools import partial
 import torch
 import torchvision.transforms as T
-from torchvision.datasets import MNIST
 from lightning.storage import Path
 from lightning.components.python import TracerPythonScript
 from lightning.components.serve import ServeGradio
@@ -66,15 +65,15 @@ class ImageServeGradio(ServeGradio):
     inputs = gr.inputs.Image(type="pil", shape=(28, 28))
     outputs = gr.outputs.Label(num_top_classes=10)
 
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
+    def __init__(self, cloud_compute, *args, **kwargs):
+        super().__init__(*args, cloud_compute=cloud_compute, **kwargs)
         self.examples = None
         self.best_model_path = None
         self._transform = None
         self._labels = {idx: str(idx) for idx in range(10)}
 
     def run(self, best_model_path):
-        self.examples = []
+        self.examples = [os.path.join("./images", f) for f in os.listdir("./images")]
         self.best_model_path = best_model_path
         self._transform = T.Compose([T.Resize((28, 28)), T.ToTensor()])
         super().run()

@@ -8,7 +8,7 @@ class TrainDeploy(L.LightningFlow):
             script_args=["--trainer.max_epochs=5"],
         )
 
-        self.serve_work = L.components.demo.ImageServeGradio(cloud_compute=L.CloudCompute("cpu", 1))
+        self.serve_work = L.components.demo.ImageServeGradio(L.CloudCompute("cpu", 1))
 
     def run(self):
         # 1. Run the python script that trains the model
@@ -19,9 +19,8 @@ class TrainDeploy(L.LightningFlow):
             self.serve_work.run(self.train_work.best_model_path)
 
     def configure_layout(self):
-        return [
-            {"name": "WandB Run", "content": self.train_work},
-            {"name": "Gradio Demo", "content": self.serve_work},
-        ]
+        tab_1 = {"name": "WandB Run", "content": self.train_work}
+        tab_2 = {"name": "Gradio Demo", "content": self.serve_work}
+        return [tab_1, tab_2]
 
 app = L.LightningApp(TrainDeploy())
