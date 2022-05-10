@@ -1,3 +1,4 @@
+import os.path as ops
 import lightning as L
 from quick_start.components import PyTorchLightningScript, ImageServeGradio
 
@@ -5,7 +6,7 @@ class TrainDeploy(L.LightningFlow):
     def __init__(self):
         super().__init__()
         self.train_work = PyTorchLightningScript(
-            script_path="./train_script.py",
+            script_path=ops.join(ops.dirname(__file__), "./train_script.py"),
             script_args=["--trainer.max_epochs=5"],
         )
 

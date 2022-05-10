@@ -7,7 +7,6 @@ from pytorch_lightning.utilities.cli import LightningCLI
 from torch.nn import functional as F
 from torchmetrics import Accuracy
 from torchvision.datasets import MNIST
-from quick_start.train.net import Net
 
 class Net(nn.Module):
     def __init__(self):
