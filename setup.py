@@ -68,6 +68,9 @@ setup(
             f"{LIGHTNING_COMPONENT_PREFIX} = {PACKAGE_NAME}:exported_lightning_components",
         ],
     },
+    cmdclass={
+        "install": PostInstallCommand,
+    },
     setup_requires=["wheel"],
     install_requires=setup_tools._load_requirements(_PATH_ROOT),
 )
