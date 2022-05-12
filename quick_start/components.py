@@ -4,6 +4,7 @@ import warnings
 from functools import partial
 import torch
 import torchvision.transforms as T
+from quick_start.download import download_data
 from lightning.storage import Path
 from lightning.components.python import TracerPythonScript
 from lightning.components.serve import ServeGradio
@@ -73,10 +74,8 @@ class ImageServeGradio(ServeGradio):
         self._labels = {idx: str(idx) for idx in range(10)}
 
     def run(self, best_model_path):
-        # image_folder = pathlib.Path(os.path.join(os.path.dirname(__file__), "images")).absolute()
-        # # folder = pathlib.Path(os.getcwd()).absolute()
-        # # relative_path = image_folder.relative_to(folder)
-        # self.examples = ["file:///" + os.path.join(str(image_folder), f) for f in os.listdir(image_folder)]
+        download_data("https://pl-flash-data.s3.amazonaws.com/assets_lightning/images.tar.gz", "./")
+        self.examples = [os.path.join(str("./images"), f) for f in os.listdir("./images")]
         self.best_model_path = best_model_path
         self._transform = T.Compose([T.Resize((28, 28)), T.ToTensor()])
         super().run()
