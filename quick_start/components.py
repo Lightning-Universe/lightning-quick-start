@@ -1,6 +1,7 @@
+import warnings
+warnings.simplefilter("ignore")
 import logging
 import os
-import warnings
 from functools import partial
 import torch
 import torchvision.transforms as T
@@ -9,6 +10,7 @@ from lightning.storage import Path
 from lightning.components.python import TracerPythonScript
 from lightning.components.serve import ServeGradio
 import gradio as gr
+
 
 logger = logging.getLogger(__name__)
 
