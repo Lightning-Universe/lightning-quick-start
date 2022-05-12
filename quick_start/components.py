@@ -44,6 +44,7 @@ class PyTorchLightningScript(TracerPythonScript):
         return tracer
 
     def run(self, *args, **kwargs):
+        download_data("https://pl-flash-data.s3.amazonaws.com/assets_lightning/demo_weights.pt", "./")
         self.script_args += [
             "--trainer.limit_train_batches=4",
             "--trainer.limit_val_batches=4",

@@ -40,7 +40,7 @@ class ImageClassifier(LightningModule):
         self.model = model or Net()
         self.val_acc = Accuracy()
 
-        checkpoint_path = os.path.join(os.path.dirname(__file__), "demo_weights")
+        checkpoint_path = os.path.join(os.path.dirname(__file__), "demo_weights.pt")
         if os.path.exists(checkpoint_path):
             self.load_state_dict(torch.load(checkpoint_path).state_dict())
 
