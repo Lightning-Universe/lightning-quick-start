@@ -2,6 +2,7 @@ include *.py
 include *.txt
 exclude *.lightning
 exclude *.gridignore
+exclude *wandb*
 recursive-exclude quick_start *.gridignore
 
 
