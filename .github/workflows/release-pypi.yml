@@ -7,7 +7,6 @@ on:  # Trigger the workflow on push to master branch with changes in __about__.p
       - "main"
     paths:
       - "quick_start/__about__.py"
-  pull_request:
 
 # based on https://github.com/pypa/gh-action-pypi-publish
 jobs:
@@ -31,7 +30,7 @@ jobs:
 
     - name: Build
       run: >-
-        python setup.py sdist
+        python setup.py sdist bdist_wheel
 
     - name: Publish to Custom PyPI
       uses: pypa/gh-action-pypi-publish@master
