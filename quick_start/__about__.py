@@ -1,4 +1,4 @@
-__version__ = "0.0.7"
+__version__ = "0.0.8"
 __author__ = "PyTorchLightning et al."
 __author_email__ = "name@grid.ai"
 __license__ = "TBD"

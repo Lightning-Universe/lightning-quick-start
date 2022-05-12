@@ -48,15 +48,6 @@ class PostInstallCommand(install):
         print(
             f"echo Installed lightning component package: {json.dumps(json.dumps(LIGHTNING_COMPONENT_INFO))}"
         )
-        import logging
-        import sys
-
-        logging.basicConfig(stream=sys.stderr, level=logging.INFO)
-        log = logging.getLogger()
-
-        log.info(
-            f"echo Installed lightning component package: {json.dumps(json.dumps(LIGHTNING_COMPONENT_INFO))}"
-        )
 
 
 setup(
