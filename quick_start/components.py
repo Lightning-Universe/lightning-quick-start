@@ -73,7 +73,10 @@ class ImageServeGradio(ServeGradio):
         self._labels = {idx: str(idx) for idx in range(10)}
 
     def run(self, best_model_path):
-        self.examples = [os.path.join("./images", f) for f in os.listdir("./images")]
+        # image_folder = pathlib.Path(os.path.join(os.path.dirname(__file__), "images")).absolute()
+        # # folder = pathlib.Path(os.getcwd()).absolute()
+        # # relative_path = image_folder.relative_to(folder)
+        # self.examples = ["file:///" + os.path.join(str(image_folder), f) for f in os.listdir(image_folder)]
         self.best_model_path = best_model_path
         self._transform = T.Compose([T.Resize((28, 28)), T.ToTensor()])
         super().run()
