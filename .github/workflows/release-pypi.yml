@@ -31,7 +31,7 @@ jobs:
 
     - name: Build
       run: >-
-        python setup.py sdist bdist_wheel
+        python setup.py sdist
 
     - name: Publish to Custom PyPI
       uses: pypa/gh-action-pypi-publish@master
