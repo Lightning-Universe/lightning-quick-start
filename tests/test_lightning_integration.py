@@ -8,8 +8,8 @@ def test_lightning_can_use_external_component():
         run_app,
         [
             "tests/integration_app/app.py",
-            "--blocking",
-            "False",
+            "--parallel",
+            "True",
             "--open-ui",
             "False",
         ],
