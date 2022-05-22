@@ -21,8 +21,8 @@ class TrainDeploy(L.LightningFlow):
             self.serve_work.run(self.train_work.best_model_path)
 
     def configure_layout(self):
-        tab_1 = {"name": "WandB Run", "content": self.train_work}
-        tab_2 = {"name": "Gradio Demo", "content": self.serve_work}
+        tab_1 = {"name": "Model training", "content": self.train_work}
+        tab_2 = {"name": "Interactive demo", "content": self.serve_work}
         return [tab_1, tab_2]
 
 app = L.LightningApp(TrainDeploy())
