@@ -11,8 +11,6 @@ from lightning.storage import Path
 from lightning.components.python import TracerPythonScript
 from lightning.components.serve import ServeGradio
 import gradio as gr
-from time import sleep
-
 
 logger = logging.getLogger(__name__)
 
