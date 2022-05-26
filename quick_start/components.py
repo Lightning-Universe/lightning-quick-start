@@ -6,11 +6,11 @@ from functools import partial
 import torch
 import torchvision.transforms as T
 from quick_start.download import download_data
+from subprocess import Popen
 from lightning.storage import Path
 from lightning.components.python import TracerPythonScript
 from lightning.components.serve import ServeGradio
 import gradio as gr
-
 
 logger = logging.getLogger(__name__)
 
@@ -19,26 +19,25 @@ class PyTorchLightningScript(TracerPythonScript):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, raise_exception=True, **kwargs)
         self.best_model_path = None
+        self._process = None
 
     def configure_tracer(self):
         from pytorch_lightning import Trainer
         from pytorch_lightning.callbacks import Callback
-        from pytorch_lightning.loggers import WandbLogger
 
         tracer = super().configure_tracer()
 
-        class CollectWandbURL(Callback):
+        class CollectURL(Callback):
 
             def __init__(self, work):
                 self._work = work
 
             def on_train_start(self, trainer, *_):
-                self._work._url = trainer.logger.experiment._settings.run_url
+                cmd = f"tensorboard --logdir={trainer.logger.log_dir} --host {self._work.host} --port {self._work.port}"
+                self._work._process = Popen(cmd.split(" "))
 
         def trainer_pre_fn(self, *args, work=None, **kwargs):
-            os.environ["WANDB_API_KEY"] = "0f7ef1a1fd67298367d8ebaf0ffae58272e6eb17"
-            kwargs['callbacks'].append(CollectWandbURL(work))
-            kwargs['logger'] = [WandbLogger(save_dir=os.path.dirname(__file__))]
+            kwargs['callbacks'].append(CollectURL(work))
             return {}, args, kwargs
 
         tracer = super().configure_tracer()
