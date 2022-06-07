@@ -10,7 +10,7 @@ class TrainDeploy(L.LightningFlow):
             script_args=["--trainer.max_epochs=5"],
         )
 
-        self.serve_work = ImageServeGradio(L.CloudCompute("cpu", 1))
+        self.serve_work = ImageServeGradio(L.CloudCompute("cpu"))
 
     def run(self):
         # 1. Run the python script that trains the model
