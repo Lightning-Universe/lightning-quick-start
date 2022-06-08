@@ -64,8 +64,7 @@ class PyTorchLightningScript(TracerPythonScript):
         self.best_model_path = Path("model_weight.pt")
 
 class ImageServeGradio(ServeGradio):
-
-    inputs = gr.inputs.Image(type="pil", shape=(28, 28))
+    inputs = gr.inputs.Image(type="pil", shape=(28, 28), source="", label="Select an input image")
     outputs = gr.outputs.Label(num_top_classes=10)
 
     def __init__(self, cloud_compute, *args, **kwargs):
