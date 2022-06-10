@@ -33,8 +33,10 @@ class PyTorchLightningScript(TracerPythonScript):
                 self._work = work
 
             def on_train_start(self, trainer, *_):
-                cmd = f"tensorboard --logdir='{trainer.logger.log_dir}' --host {self._work.host} --port {self._work.port}"
-                self._work._process = Popen(cmd.split(" "))
+                self._work._process = Popen(
+                    f"tensorboard --logdir='{trainer.logger.log_dir}' --host {self._work.host} --port {self._work.port}",
+                    shell=True,
+                )
 
         def trainer_pre_fn(self, *args, work=None, **kwargs):
             kwargs['callbacks'].append(CollectURL(work))
