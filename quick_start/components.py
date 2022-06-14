@@ -7,9 +7,9 @@ import torch
 import torchvision.transforms as T
 from quick_start.download import download_data
 from subprocess import Popen
-from lightning.storage import Path
-from lightning.components.python import TracerPythonScript
-from lightning.components.serve import ServeGradio
+from lightning.app.storage import Path
+from lightning.app.components.python import TracerPythonScript
+from lightning.app.components.serve import ServeGradio
 import gradio as gr
 
 logger = logging.getLogger(__name__)
