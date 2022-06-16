@@ -20,7 +20,6 @@ class TrainDeploy(L.LightningFlow):
             script_path= ops.join(ops.dirname(__file__), "./train_script.py"),
             script_args=["--trainer.max_epochs=5"],
             total_trials=4,
-            simultaneous_trials=2,
             objective_work_cls=DistributionsPyTorchLightningScript,
         )
 
