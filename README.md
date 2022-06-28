@@ -30,3 +30,8 @@ lightning run app app.py --cloud
 ```
 USE_GPU=1 lightning run app app.py --cloud
 ```
+
+### Learn how it works
+
+The components are [here](https://github.com/Lightning-AI/lightning-quick-start/blob/main/quick_start/components.py) and the code is heavily commented. 
+Once you understand this example well, you aren't a beginner with Lightning App anymore ;)   
