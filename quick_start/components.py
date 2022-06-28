@@ -21,9 +21,10 @@ class PyTorchLightningScript(TracerPythonScript):
     and injects a callback in the Trainer at runtime in order to start tensorboard server."""
 
     def __init__(self, *args, **kwargs):
-        super().__init__(*args, raise_exception=True, **kwargs)
+        super().__init__(*args, **kwargs)
         # 1. Keep track of the best model path.
         self.best_model_path = None
+        self.best_model_score = None
 
     def configure_tracer(self):
         # 1. Override `configure_tracer``
@@ -66,7 +67,7 @@ class PyTorchLightningScript(TracerPythonScript):
 
         # 2. Add some arguments to the Trainer to make training faster.
         self.script_args += [
-            "--trainer.limit_train_batches=4",
+            "--trainer.limit_train_batches=12",
             "--trainer.limit_val_batches=4",
             "--trainer.callbacks=ModelCheckpoint",
             "--trainer.callbacks.monitor=val_acc",
@@ -98,6 +99,9 @@ class PyTorchLightningScript(TracerPythonScript):
         # When running in the cloud on multiple machines, by simply passing this reference to another work,
         # it triggers automatically a transfer.
         self.best_model_path = Path("model_weight.pt")
+
+        # 5. Keep track of the metrics.
+        self.best_model_score = float(script_globals["cli"].trainer.checkpoint_callback.best_model_score)
 
 class ImageServeGradio(ServeGradio):
 
