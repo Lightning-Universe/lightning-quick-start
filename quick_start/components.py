@@ -16,6 +16,10 @@ logger = logging.getLogger(__name__)
 
 
 class PyTorchLightningScript(TracerPythonScript):
+
+    """This component executes a PyTorch Lightning script
+    and injects a callback in the Trainer at runtime in order to start tensorboard server."""
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, raise_exception=True, **kwargs)
         # 1. Keep track of the best model path.
