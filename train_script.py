@@ -29,9 +29,8 @@ class Net(nn.Module):
         x = self.fc1(x)
         x = F.relu(x)
         x = self.dropout2(x)
-        x = self.fc2(x)
-        output = F.log_softmax(x, dim=1)
-        return output
+        logits = self.fc2(x)
+        return logits
 
 class ImageClassifier(LightningModule):
     def __init__(self, model=None, lr=1.0, gamma=0.7, batch_size=32):
@@ -54,14 +53,14 @@ class ImageClassifier(LightningModule):
     def training_step(self, batch, batch_idx):
         x, y = batch
         logits = self.forward(x)
-        loss = F.nll_loss(logits, y.long())
+        loss = F.cross_entropy(logits, y.long())
         self.log("train_loss", loss, on_step=True, on_epoch=True)
         return loss
 
     def validation_step(self, batch, batch_idx):
         x, y = batch
         logits = self.forward(x)
-        loss = F.nll_loss(logits, y.long())
+        loss = F.cross_entropy(logits, y.long())
         self.log("val_acc", self.val_acc(logits, y), on_step=True, on_epoch=True)
         self.log("val_loss", loss)
 
