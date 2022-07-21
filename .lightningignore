@@ -15,4 +15,4 @@ flagged
 *wandb*
 .git
 venv
-
+.venv
