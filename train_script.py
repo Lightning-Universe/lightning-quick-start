@@ -38,7 +38,6 @@ class ImageClassifier(LightningModule):
         super().__init__()
         self.save_hyperparameters(ignore="model")
         self.model = model or Net()
-        self.val_acc = Accuracy()
 
         checkpoint_path = os.path.join(os.path.dirname(__file__), "demo_weights.pt")
         if os.path.exists(checkpoint_path):
@@ -62,7 +61,6 @@ class ImageClassifier(LightningModule):
         x, y = batch
         logits = self.forward(x)
         loss = F.nll_loss(logits, y.long())
-        self.log("val_acc", self.val_acc(logits, y), on_step=True, on_epoch=True)
         self.log("val_loss", loss)
 
     def configure_optimizers(self):

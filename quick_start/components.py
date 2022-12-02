@@ -70,7 +70,7 @@ class PyTorchLightningScript(TracerPythonScript):
             "--trainer.limit_train_batches=12",
             "--trainer.limit_val_batches=4",
             "--trainer.callbacks=ModelCheckpoint",
-            "--trainer.callbacks.monitor=val_acc",
+            "--trainer.callbacks.monitor=val_loss",
         ]
 
         # 3. Utilities
