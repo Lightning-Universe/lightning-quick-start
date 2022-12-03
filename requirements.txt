@@ -7,3 +7,4 @@ protobuf<4.21.0  # 4.21 breaks with wandb, tensorboard, or pytorch-lightning: ht
 lightning_hpo
 websockets
 lightning
+tensorboard

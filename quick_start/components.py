@@ -29,9 +29,9 @@ class PyTorchLightningScript(TracerPythonScript):
     def configure_tracer(self):
         # 1. Override `configure_tracer``
 
-        # 2. Import objects from pytorch_lightning
-        from pytorch_lightning import Trainer
-        from pytorch_lightning.callbacks import Callback
+        # 2. Import objects from lightning.pytorch
+        from lightning.pytorch import Trainer
+        from lightning.pytorch.callbacks import Callback
 
         # 3. Create a tracer.
         tracer = super().configure_tracer()
@@ -108,8 +108,8 @@ class ImageServeGradio(ServeGradio):
     inputs = gr.inputs.Image(type="pil", shape=(28, 28))
     outputs = gr.outputs.Label(num_top_classes=10)
 
-    def __init__(self, cloud_compute, *args, **kwargs):
-        super().__init__(*args, cloud_compute=cloud_compute, **kwargs)
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
         self.examples = None
         self.best_model_path = None
         self._transform = None
