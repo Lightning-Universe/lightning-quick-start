@@ -7,10 +7,11 @@ class TrainDeploy(L.LightningFlow):
         super().__init__()
         self.train_work = PyTorchLightningScript(
             script_path=ops.join(ops.dirname(__file__), "./train_script.py"),
-            script_args=["--trainer.max_epochs=5"],
+            script_args=["--trainer.max_epochs=10"],
+            cloud_compute=L.CloudCompute("cpu-medium", idle_timeout=60),
         )
 
-        self.serve_work = ImageServeGradio(L.CloudCompute("cpu"))
+        self.serve_work = ImageServeGradio(start_with_flow=False)
 
     def run(self):
         # 1. Run the python script that trains the model
@@ -21,8 +22,10 @@ class TrainDeploy(L.LightningFlow):
             self.serve_work.run(self.train_work.best_model_path)
 
     def configure_layout(self):
-        tab_1 = {"name": "Model training", "content": self.train_work}
-        tab_2 = {"name": "Interactive demo", "content": self.serve_work}
-        return [tab_1, tab_2]
+        tabs = []
+        if not self.train_work.has_stopped:
+            tabs.append({"name": "Model training", "content": self.train_work})
+        tabs.append({"name": "Interactive demo", "content": self.serve_work})
+        return tabs
 
 app = L.LightningApp(TrainDeploy())

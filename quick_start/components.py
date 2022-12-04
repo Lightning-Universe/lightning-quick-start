@@ -29,9 +29,9 @@ class PyTorchLightningScript(TracerPythonScript):
     def configure_tracer(self):
         # 1. Override `configure_tracer``
 
-        # 2. Import objects from pytorch_lightning
-        from pytorch_lightning import Trainer
-        from pytorch_lightning.callbacks import Callback
+        # 2. Import objects from lightning.pytorch
+        from lightning.pytorch import Trainer
+        from lightning.pytorch.callbacks import Callback
 
         # 3. Create a tracer.
         tracer = super().configure_tracer()
@@ -70,7 +70,7 @@ class PyTorchLightningScript(TracerPythonScript):
             "--trainer.limit_train_batches=12",
             "--trainer.limit_val_batches=4",
             "--trainer.callbacks=ModelCheckpoint",
-            "--trainer.callbacks.monitor=val_acc",
+            "--trainer.callbacks.monitor=val_loss",
         ]
 
         # 3. Utilities
@@ -108,8 +108,8 @@ class ImageServeGradio(ServeGradio):
     inputs = gr.inputs.Image(type="pil", shape=(28, 28))
     outputs = gr.outputs.Label(num_top_classes=10)
 
-    def __init__(self, cloud_compute, *args, **kwargs):
-        super().__init__(*args, cloud_compute=cloud_compute, **kwargs)
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
         self.examples = None
         self.best_model_path = None
         self._transform = None
@@ -127,15 +127,16 @@ class ImageServeGradio(ServeGradio):
         super().run()
 
     def predict(self, img):
-        # 1. Receive an image and transform it into a tensor
-        img = self._transform(img)[0]
-        img = img.unsqueeze(0).unsqueeze(0)
+        with torch.inference_mode():
+             # 1. Receive an image and transform it into a tensor
+            img = self._transform(img)[0]
+            img = img.unsqueeze(0).unsqueeze(0)
 
-        # 2. Apply the model on the image and convert the logits into probabilities
-        prediction = torch.exp(self.model(img))
+            # 2. Apply the model on the image and convert the logits into probabilities
+            prediction = torch.exp(self.model(img))
 
-        # 3. Return the data in the `gr.outputs.Label` format
-        return {self._labels[i]: prediction[0][i].item() for i in range(10)}
+            # 3. Return the data in the `gr.outputs.Label` format
+            return {self._labels[i]: prediction[0][i].item() for i in range(10)}
 
     def build_model(self):
         # 1. Load the best model. As torchscripted by the first component, using torch.load works out of the box.
