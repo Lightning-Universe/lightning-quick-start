@@ -127,15 +127,16 @@ class ImageServeGradio(ServeGradio):
         super().run()
 
     def predict(self, img):
-        # 1. Receive an image and transform it into a tensor
-        img = self._transform(img)[0]
-        img = img.unsqueeze(0).unsqueeze(0)
+        with torch.inference_mode():
+             # 1. Receive an image and transform it into a tensor
+            img = self._transform(img)[0]
+            img = img.unsqueeze(0).unsqueeze(0)
 
-        # 2. Apply the model on the image and convert the logits into probabilities
-        prediction = torch.exp(self.model(img))
+            # 2. Apply the model on the image and convert the logits into probabilities
+            prediction = torch.exp(self.model(img))
 
-        # 3. Return the data in the `gr.outputs.Label` format
-        return {self._labels[i]: prediction[0][i].item() for i in range(10)}
+            # 3. Return the data in the `gr.outputs.Label` format
+            return {self._labels[i]: prediction[0][i].item() for i in range(10)}
 
     def build_model(self):
         # 1. Load the best model. As torchscripted by the first component, using torch.load works out of the box.
