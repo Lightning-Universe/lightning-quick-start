@@ -11,7 +11,7 @@ class TrainDeploy(L.LightningFlow):
             cloud_compute=L.CloudCompute("cpu-medium", idle_timeout=60),
         )
 
-        self.serve_work = ImageServeGradio(start_with_flow=False)
+        self.serve_work = ImageServeGradio()
 
     def run(self):
         # 1. Run the python script that trains the model
