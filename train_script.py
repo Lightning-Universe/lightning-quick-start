@@ -3,7 +3,7 @@ import os
 import torch
 from torch import nn
 import torchvision.transforms as T
-from lightning.pytorch.utilities.cli import LightningCLI
+from lightning.pytorch.cli import LightningCLI
 from torch.nn import functional as F
 from torchvision.datasets import MNIST
 
