@@ -89,6 +89,6 @@ class MNISTDataModule(L.LightningDataModule):
 
 if __name__ == "__main__":
     cli = LightningCLI(
-        ImageClassifier, MNISTDataModule, seed_everything_default=42, save_config_overwrite=True, run=False
+        ImageClassifier, MNISTDataModule, seed_everything_default=42, save_config_kwargs={"overwrite": True}, run=False
     )
     cli.trainer.fit(cli.model, datamodule=cli.datamodule)
