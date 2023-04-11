@@ -2,6 +2,8 @@ import logging
 
 from lightning import LightningApp, LightningFlow
 
+from quick_start import PyTorchLightningScript, ImageServeGradio
+
 logger = logging.getLogger(__name__)
 
 
@@ -10,8 +12,6 @@ class RootFlow(LightningFlow):
         super().__init__()
 
     def run(self):
-        from lightning.components.demo import ImageServeGradio, PyTorchLightningScript
-
         print(PyTorchLightningScript)
         print(ImageServeGradio)
         exit(0)
