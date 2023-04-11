@@ -1,11 +1,13 @@
 import os.path as ops
+
 import lightning as L
-from quick_start.components import PyTorchLightningScript, ImageServeGradio
 import optuna
-from lightning_hpo import Optimizer, BaseObjective
+from lightning_hpo import BaseObjective, Optimizer
+
+from quick_start.components import ImageServeGradio, PyTorchLightningScript
+
 
 class HPOPyTorchLightningScript(PyTorchLightningScript, BaseObjective):
-
     @staticmethod
     def distributions():
         return {"model.lr": optuna.distributions.LogUniformDistribution(0.0001, 0.1)}
@@ -18,7 +20,7 @@ class TrainDeploy(L.LightningFlow):
             script_path=ops.join(ops.dirname(__file__), "./train_script.py"),
             script_args=["--trainer.max_epochs=5"],
             objective_cls=HPOPyTorchLightningScript,
-            n_trials=4
+            n_trials=4,
         )
 
         self.serve_work = ImageServeGradio(L.CloudCompute("cpu"))
@@ -35,5 +37,6 @@ class TrainDeploy(L.LightningFlow):
         tab_1 = {"name": "Model training", "content": self.train_work.hi_plot}
         tab_2 = {"name": "Interactive demo", "content": self.serve_work}
         return [tab_1, tab_2]
+
 
 app = L.LightningApp(TrainDeploy())

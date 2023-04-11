@@ -1,24 +1,26 @@
 import warnings
+
 warnings.simplefilter("ignore")
-import logging
-import os
-from functools import partial
-import torch
-import torchvision.transforms as T
-from quick_start.download import download_data
-from subprocess import Popen
-from lightning.app.storage import Path
-from lightning.app.components.python import TracerPythonScript
-from lightning.app.components.serve import ServeGradio
-import gradio as gr
+import logging  # noqa: E402
+import os  # noqa: E402
+from functools import partial  # noqa: E402
+from subprocess import Popen  # noqa: E402
+
+import gradio  # noqa: E402
+import torch  # noqa: E402
+import torchvision.transforms as T  # noqa: E402
+from lightning.app.components.python import TracerPythonScript  # noqa: E402
+from lightning.app.components.serve import ServeGradio  # noqa: E402
+from lightning.app.storage import Path  # noqa: E402
+
+from quick_start.download import download_data  # noqa: E402
 
 logger = logging.getLogger(__name__)
 
 
 class PyTorchLightningScript(TracerPythonScript):
-
-    """This component executes a PyTorch Lightning script
-    and injects a callback in the Trainer at runtime in order to start tensorboard server."""
+    """This component executes a PyTorch Lightning script and injects a callback in the Trainer at runtime in order to
+    start tensorboard server."""
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -38,7 +40,6 @@ class PyTorchLightningScript(TracerPythonScript):
 
         # 4. Implement a callback to launch tensorboard server.
         class TensorboardServerLauncher(Callback):
-
             def __init__(self, work):
                 # The provided `work` is the current ``PyTorchLightningScript`` work.
                 self._work = work
@@ -46,24 +47,30 @@ class PyTorchLightningScript(TracerPythonScript):
             def on_train_start(self, trainer, *_):
                 # Provide `host` and `port` in order for tensorboard to be usable in the cloud.
                 self._work._process = Popen(
-                    f"tensorboard --logdir='{trainer.logger.log_dir}' --host {self._work.host} --port {self._work.port}",
+                    f"tensorboard --logdir='{trainer.logger.log_dir}'"
+                    f" --host {self._work.host} --port {self._work.port}",
                     shell=True,
                 )
 
         def trainer_pre_fn(self, *args, work=None, **kwargs):
             # Intercept Trainer __init__ call and inject a ``TensorboardServerLauncher`` component.
-            kwargs['callbacks'].append(TensorboardServerLauncher(work))
+            kwargs["callbacks"].append(TensorboardServerLauncher(work))
             return {}, args, kwargs
 
         # 5. Patch the `__init__` method of the Trainer to inject our callback with a reference to the work.
-        tracer.add_traced(Trainer, "__init__", pre_fn=partial(trainer_pre_fn, work=self))
+        tracer.add_traced(
+            Trainer, "__init__", pre_fn=partial(trainer_pre_fn, work=self)
+        )
         return tracer
 
     def run(self, *args, **kwargs):
         ######### [DEMO PURPOSE] #########
 
         # 1. Download a pre-trained model for speed reason.
-        download_data("https://pl-flash-data.s3.amazonaws.com/assets_lightning/demo_weights.pt", "./")
+        download_data(
+            "https://pl-flash-data.s3.amazonaws.com/assets_lightning/demo_weights.pt",
+            "./",
+        )
 
         # 2. Add some arguments to the Trainer to make training faster.
         self.script_args += [
@@ -89,7 +96,9 @@ class PyTorchLightningScript(TracerPythonScript):
         lightning_module = script_globals["cli"].trainer.lightning_module
 
         # 2. From the checkpoint_callback, we are accessing the best model weights
-        checkpoint = torch.load(script_globals["cli"].trainer.checkpoint_callback.best_model_path)
+        checkpoint = torch.load(
+            script_globals["cli"].trainer.checkpoint_callback.best_model_path
+        )
 
         # 3. Load the best weights and torchscript the model.
         lightning_module.load_state_dict(checkpoint["state_dict"])
@@ -101,12 +110,14 @@ class PyTorchLightningScript(TracerPythonScript):
         self.best_model_path = Path("model_weight.pt")
 
         # 5. Keep track of the metrics.
-        self.best_model_score = float(script_globals["cli"].trainer.checkpoint_callback.best_model_score)
+        self.best_model_score = float(
+            script_globals["cli"].trainer.checkpoint_callback.best_model_score
+        )
+
 
 class ImageServeGradio(ServeGradio):
-
-    inputs = gr.inputs.Image(type="pil", shape=(28, 28))
-    outputs = gr.outputs.Label(num_top_classes=10)
+    inputs = gradio.inputs.Image(type="pil", shape=(28, 28))
+    outputs = gradio.outputs.Label(num_top_classes=10)
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -118,8 +129,11 @@ class ImageServeGradio(ServeGradio):
     def run(self, best_model_path):
         ######### [DEMO PURPOSE] #########
         # Download some examples so it works locally and in the cloud (issue with gradio on loading the images.)
-        download_data("https://pl-flash-data.s3.amazonaws.com/assets_lightning/images.tar.gz", "./")
-        self.examples = [os.path.join(str("./images"), f) for f in os.listdir("./images")]
+        download_data(
+            "https://pl-flash-data.s3.amazonaws.com/assets_lightning/images.tar.gz",
+            "./",
+        )
+        self.examples = [os.path.join("./images", f) for f in os.listdir("./images")]
         ######### [DEMO PURPOSE] #########
 
         self.best_model_path = best_model_path
@@ -128,7 +142,7 @@ class ImageServeGradio(ServeGradio):
 
     def predict(self, img):
         with torch.inference_mode():
-             # 1. Receive an image and transform it into a tensor
+            # 1. Receive an image and transform it into a tensor
             img = self._transform(img)[0]
             img = img.unsqueeze(0).unsqueeze(0)
 
