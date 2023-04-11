@@ -1,6 +1,9 @@
 import os.path as ops
+
 import lightning as L
-from quick_start.components import PyTorchLightningScript, ImageServeGradio
+
+from quick_start.components import ImageServeGradio, PyTorchLightningScript
+
 
 class TrainDeploy(L.LightningFlow):
     def __init__(self):
@@ -27,5 +30,6 @@ class TrainDeploy(L.LightningFlow):
             tabs.append({"name": "Model training", "content": self.train_work})
         tabs.append({"name": "Interactive demo", "content": self.serve_work})
         return tabs
+
 
 app = L.LightningApp(TrainDeploy())

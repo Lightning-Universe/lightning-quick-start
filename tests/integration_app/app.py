@@ -10,7 +10,8 @@ class RootFlow(LightningFlow):
         super().__init__()
 
     def run(self):
-        from lightning.components.demo import PyTorchLightningScript, ImageServeGradio
+        from lightning.components.demo import ImageServeGradio, PyTorchLightningScript
+
         print(PyTorchLightningScript)
         print(ImageServeGradio)
         exit(0)
