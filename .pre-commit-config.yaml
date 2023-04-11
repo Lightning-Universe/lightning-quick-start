@@ -28,11 +28,6 @@ repos:
         args: [--py38-plus]
         name: Upgrade code
 
-  - repo: https://github.com/PyCQA/isort
-    rev: 5.12.0
-    hooks:
-      - id: isort
-
   - repo: https://github.com/psf/black
     rev: 23.3.0
     hooks:
@@ -57,4 +52,6 @@ repos:
     rev: 6.0.0
     hooks:
       - id: flake8
-        args: ["--max-line-length=120"]
+        args:
+          - "--max-line-length=120"
+          - "--ignore=E266"

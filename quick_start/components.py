@@ -1,19 +1,19 @@
 import warnings
 
 warnings.simplefilter("ignore")
-import logging
-import os
-from functools import partial
-from subprocess import Popen
+import logging  # noqa: E402
+import os  # noqa: E402
+from functools import partial  # noqa: E402
+from subprocess import Popen  # noqa: E402
 
-import gradio as gr
-import torch
-import torchvision.transforms as T
-from lightning.app.components.python import TracerPythonScript
-from lightning.app.components.serve import ServeGradio
-from lightning.app.storage import Path
+import gradio  # noqa: E402
+import torch  # noqa: E402
+import torchvision.transforms as T  # noqa: E402
+from lightning.app.components.python import TracerPythonScript  # noqa: E402
+from lightning.app.components.serve import ServeGradio  # noqa: E402
+from lightning.app.storage import Path  # noqa: E402
 
-from quick_start.download import download_data
+from quick_start.download import download_data  # noqa: E402
 
 logger = logging.getLogger(__name__)
 
@@ -47,7 +47,8 @@ class PyTorchLightningScript(TracerPythonScript):
             def on_train_start(self, trainer, *_):
                 # Provide `host` and `port` in order for tensorboard to be usable in the cloud.
                 self._work._process = Popen(
-                    f"tensorboard --logdir='{trainer.logger.log_dir}' --host {self._work.host} --port {self._work.port}",
+                    f"tensorboard --logdir='{trainer.logger.log_dir}'"
+                    f" --host {self._work.host} --port {self._work.port}",
                     shell=True,
                 )
 
@@ -115,8 +116,8 @@ class PyTorchLightningScript(TracerPythonScript):
 
 
 class ImageServeGradio(ServeGradio):
-    inputs = gr.inputs.Image(type="pil", shape=(28, 28))
-    outputs = gr.outputs.Label(num_top_classes=10)
+    inputs = gradio.inputs.Image(type="pil", shape=(28, 28))
+    outputs = gradio.outputs.Label(num_top_classes=10)
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
