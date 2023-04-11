@@ -1,8 +1,8 @@
-torchvision<=0.12.0
+torchvision<=0.15.1
 jsonargparse[signatures]
-wandb==0.12.16
-gradio==2.9.4
-pyyaml==5.4.0
+wandb<=0.14.0
+gradio<=3.23.0
+pyyaml<=6.0
 protobuf<4.21.0  # 4.21 breaks with wandb, tensorboard, or pytorch-lightning: https://github.com/protocolbuffers/protobuf/issues/10048
 websockets
 lightning
