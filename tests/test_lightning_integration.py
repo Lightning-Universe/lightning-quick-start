@@ -1,4 +1,4 @@
-from lightning.cli.lightning_cli import run_app
+from lightning.app.cli.lightning_cli import run_app
 from click.testing import CliRunner
 
 
