@@ -3,7 +3,7 @@ jsonargparse[signatures]
 wandb <=0.15.7
 gradio <=3.39.0
 pyyaml <=6.0.1
-protobuf <4.24.0  # 4.21 breaks with wandb, tensorboard, or pytorch-lightning: https://github.com/protocolbuffers/protobuf/issues/10048
+protobuf <4.25.0  # 4.21 breaks with wandb, tensorboard, or pytorch-lightning: https://github.com/protocolbuffers/protobuf/issues/10048
 websockets
 lightning
 tensorboard
