@@ -1,8 +1,8 @@
 import os
 
-import lightning as L
 import torch
 import torchvision.transforms as T
+from lightning import LightningModule, LightningDataModule
 from lightning.pytorch.cli import LightningCLI
 from torch import nn
 from torch.nn import functional as F
@@ -35,7 +35,7 @@ class Net(nn.Module):
         return output
 
 
-class ImageClassifier(L.LightningModule):
+class ImageClassifier(LightningModule):
     def __init__(self, model=None, lr=1.0, gamma=0.7, batch_size=32):
         super().__init__()
         self.save_hyperparameters(ignore="model")
@@ -69,7 +69,7 @@ class ImageClassifier(L.LightningModule):
         return torch.optim.Adadelta(self.model.parameters(), lr=self.hparams.lr)
 
 
-class MNISTDataModule(L.LightningDataModule):
+class MNISTDataModule(LightningDataModule):
     def __init__(self, batch_size=32):
         super().__init__()
         self.save_hyperparameters()
