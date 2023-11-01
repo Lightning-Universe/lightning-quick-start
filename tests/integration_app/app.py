@@ -1,6 +1,6 @@
 import logging
 
-from lightning import LightningApp, LightningFlow
+from lightning.app import LightningApp, LightningFlow
 
 from quick_start import PyTorchLightningScript, ImageServeGradio
 

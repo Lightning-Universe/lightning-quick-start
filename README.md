@@ -3,7 +3,7 @@
 ### Install Lightning
 
 ```bash
-pip install lightning
+pip install lightning[app]
 ```
 
 ### Locally
