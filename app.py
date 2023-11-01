@@ -1,17 +1,17 @@
 import os.path as ops
 
-import lightning as L
+from lightning.app import CloudCompute, LightningFlow, LightningApp
 
 from quick_start.components import ImageServeGradio, PyTorchLightningScript
 
 
-class TrainDeploy(L.LightningFlow):
+class TrainDeploy(LightningFlow):
     def __init__(self):
         super().__init__()
         self.train_work = PyTorchLightningScript(
             script_path=ops.join(ops.dirname(__file__), "./train_script.py"),
             script_args=["--trainer.max_epochs=10"],
-            cloud_compute=L.CloudCompute("cpu-medium", idle_timeout=60),
+            cloud_compute=CloudCompute("cpu-medium", idle_timeout=60),
         )
 
         self.serve_work = ImageServeGradio()
@@ -32,4 +32,4 @@ class TrainDeploy(L.LightningFlow):
         return tabs
 
 
-app = L.LightningApp(TrainDeploy())
+app = LightningApp(TrainDeploy())
