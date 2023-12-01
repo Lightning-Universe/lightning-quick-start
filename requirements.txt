@@ -1,4 +1,4 @@
-torchvision <=0.16.0
+torchvision <=0.16.1
 jsonargparse[signatures]
 wandb <0.17.0
 gradio <=3.45.2
