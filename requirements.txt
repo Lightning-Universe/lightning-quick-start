@@ -1,6 +1,6 @@
 torchvision <0.18
 jsonargparse[signatures]
-wandb <0.17.0
+wandb <0.18.0
 gradio <=3.45.2
 pyyaml <=6.0.1
 protobuf <5.27.0  # 4.21 breaks with wandb, tensorboard, or pytorch-lightning: https://github.com/protocolbuffers/protobuf/issues/10048
