@@ -1,5 +1,5 @@
 default_language_version:
-  python: python3.8
+  python: python3
 
 ci:
   autofix_prs: true
@@ -34,6 +34,6 @@ repos:
     rev: v0.5.5
     hooks:
       - id: ruff
-        args: ["--fix", "--line-length=120"]
+        args: ["--fix", "--line-length=120", "--target-version=py39"]
       - id: ruff-format
         args: ["--line-length=120"]
