@@ -58,9 +58,7 @@ class PyTorchLightningScript(TracerPythonScript):
             return {}, args, kwargs
 
         # 5. Patch the `__init__` method of the Trainer to inject our callback with a reference to the work.
-        tracer.add_traced(
-            Trainer, "__init__", pre_fn=partial(trainer_pre_fn, work=self)
-        )
+        tracer.add_traced(Trainer, "__init__", pre_fn=partial(trainer_pre_fn, work=self))
         return tracer
 
     def run(self, *args, **kwargs):
@@ -96,9 +94,7 @@ class PyTorchLightningScript(TracerPythonScript):
         lightning_module = script_globals["cli"].trainer.lightning_module
 
         # 2. From the checkpoint_callback, we are accessing the best model weights
-        checkpoint = torch.load(
-            script_globals["cli"].trainer.checkpoint_callback.best_model_path
-        )
+        checkpoint = torch.load(script_globals["cli"].trainer.checkpoint_callback.best_model_path)
 
         # 3. Load the best weights and torchscript the model.
         lightning_module.load_state_dict(checkpoint["state_dict"])
@@ -110,9 +106,7 @@ class PyTorchLightningScript(TracerPythonScript):
         self.best_model_path = Path("model_weight.pt")
 
         # 5. Keep track of the metrics.
-        self.best_model_score = float(
-            script_globals["cli"].trainer.checkpoint_callback.best_model_score
-        )
+        self.best_model_score = float(script_globals["cli"].trainer.checkpoint_callback.best_model_score)
 
 
 class ImageServeGradio(ServeGradio):

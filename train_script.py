@@ -82,20 +82,12 @@ class MNISTDataModule(LightningDataModule):
         MNIST("./data", download=True)
 
     def train_dataloader(self):
-        train_dataset = MNIST(
-            "./data", train=True, download=False, transform=self.transform
-        )
-        return torch.utils.data.DataLoader(
-            train_dataset, batch_size=self.hparams.batch_size
-        )
+        train_dataset = MNIST("./data", train=True, download=False, transform=self.transform)
+        return torch.utils.data.DataLoader(train_dataset, batch_size=self.hparams.batch_size)
 
     def val_dataloader(self):
-        val_dataset = MNIST(
-            "./data", train=False, download=False, transform=self.transform
-        )
-        return torch.utils.data.DataLoader(
-            val_dataset, batch_size=self.hparams.batch_size
-        )
+        val_dataset = MNIST("./data", train=False, download=False, transform=self.transform)
+        return torch.utils.data.DataLoader(val_dataset, batch_size=self.hparams.batch_size)
 
 
 if __name__ == "__main__":
